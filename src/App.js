@@ -69,7 +69,7 @@ export default () => {
       <footer>
         Feito com <span role='img' aria-label='coração'>❤️</span> pelo Gabriel Bonato Carneiro, tutoreado pela B7Web<br/>
         Direitos de imagem para Netflix<br/>
-        Dadps pegos do site Themoviedb.org
+        Dados pegos do site Themoviedb.org
       </footer>
 
       {/* Loader da aplicação */}
