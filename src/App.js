@@ -10,30 +10,32 @@ export default () => {
   const [featuredData, setFeaturedData] = useState(null)
   const [blackHeader, setBlackHeader] =useState(false)
 
+  const selecionaDestaque = async (list) => {
+    // Selecionamos um destaque aleatório
+    const originaisNetflix = list.find(item => item.slug === 'originals')
+    const randomChosen = Math.floor(Math.random() * (originaisNetflix.items.results.length - 1))
+    const chosen = originaisNetflix.items.results[randomChosen]
+
+    // Pega as informações de uma série aleatória
+    const chosenInfo = await Tmdb.getMovieInfo(chosen.id, 'tv')
+
+    // Existe algumas séries que não tem o backdrop_path(poster), então pulamos ela
+    if (!chosenInfo || !chosenInfo.backdrop_path) {
+      return selecionaDestaque()
+    }
+
+    return chosenInfo
+  }
+
   useEffect(() => {
     const loadAll = async () => {
       // Buscando a lista de filmes e séries
       const list = await Tmdb.getHomeList()
       setMovieList(list)
 
-      let existsBackdropPath = false
-
-      // Existe algumas séries que não tem o backdrop_path(poster), então pulamos ela
-      while(!existsBackdropPath) {
-        // Selecionamos um destaque aleatório
-        const originaisNetflix = list.find(item => item.slug === 'originals')
-        const randomChosen = Math.floor(Math.random() * (originaisNetflix.items.results.length - 1))
-        const chosen = originaisNetflix.items.results[randomChosen]
-
-        // Pega as informações de uma série aleatória
-        const chosenInfo = await Tmdb.getMovieInfo(chosen.id, 'tv')
-
-        if (chosenInfo && chosenInfo.backdrop_path) {
-          existsBackdropPath = true
-
-          setFeaturedData(chosenInfo)
-        }
-      }
+      // Selecionamos um destaque aleatório
+      const chosenInfo = await selecionaDestaque(list)      
+      setFeaturedData(chosenInfo)
     }
 
     loadAll()
