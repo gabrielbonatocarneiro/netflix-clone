@@ -45,7 +45,7 @@ export default {
       },
       {
         slug: 'comedy',
-        title: 'Terror',
+        title: 'Comédia',
         items: await basicFetch('/discover/movie?with_genres=35&'),
       },
       {
@@ -65,4 +65,22 @@ export default {
       },
     ]
   },
+
+  getMovieInfo: async (movieId, type) => {
+    let info = {}
+
+    if (!movieId) return
+
+    switch(type) {
+      case 'movie':
+          info = await basicFetch(`/movie/${movieId}?`)
+        break
+
+      case 'tv':
+          info = await basicFetch(`/tv/${movieId}?`)
+        break
+    }
+
+    return info
+  }
 }
